@@ -207,7 +207,7 @@ class Chat extends Component {
                         onChange={this.handleChange}
                     >
                     </Input>
-                    <Button type="button" onClick={(e) => this.handleSubmit(e)}></Button>
+                    {/* <Button type="button" onClick={(e) => this.handleSubmit(e)}></Button> */}
                     <Button type="button" onClick={(e) => this.state.gifs ? this.setState({gifs: false}) : this.handleGifs(e)}>Gif</Button>
                     <Button type="button" id="uploadButton" onClick={(e) => this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}</Button>
                     <Button type="button">{'😁'}</Button>
