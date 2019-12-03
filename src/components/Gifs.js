@@ -31,7 +31,7 @@ function Gifs() {
 
     //GET TRENDING GIFS
     useEffect(() => {
-        axios.get(`http://api.giphy.com/v1/gifs/trending?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&limit=8`)
+        axios.get(`https://api.giphy.com/v1/gifs/trending?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&limit=8`)
             .then((res) => {
                 console.log(res.data);
                 setTrendingGifs(res.data.data);
@@ -45,7 +45,7 @@ function Gifs() {
     //SEARCH FOR GIFS
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.get(`http://api.giphy.com/v1/gifs/search?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&q=${input}&limit=8`)
+        axios.get(`https://api.giphy.com/v1/gifs/search?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&q=${input}&limit=8`)
             .then((res) => {
                 setTrendingGifs(res.data.data);
                 console.log(res.data)
