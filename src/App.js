@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+//SOCKET.IO IMPORTS
+import io from 'socket.io-client';
 //COMPONENTS
 import Time from './components/Time';
 import Chat from './components/Chat';
@@ -17,6 +19,8 @@ const NavContainer = styled.div`
   justify-content: space-between;
   background-color: #0B0C10;
   height: 60px;
+  position: fixed;
+  width: 100%;
 `
 const LinkContainer = styled.div`
   display: flex;
@@ -52,20 +56,22 @@ const Connecting = styled.h3`
 function App() {
 
   const [socketState, setSocketState] = useState();
+  // Create Socket.io connection
+  const socketio = io('http://localhost:8080');
 
   return (
     <div className="App">
       <header className="App-header">
           <NavContainer>
-            <Header>Super Chat</Header>
+            <Header>Chat</Header>
             <LinkContainer>
               <Links>Login</Links>
               <Links>Logout</Links>
             <Time connection={socketState}/>
             </LinkContainer>
           </NavContainer>
-          <Chat connection={setSocketState}/>
-          <footer><p>&copy;2019 @LambdaStudent</p></footer>
+          <Chat connection={setSocketState} socketio={socketio}/>
+          <footer style={{ color: 'white' }}><p>&copy;2019 @LambdaStudent</p></footer>
       </header>
     </div>
   );

@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-//SOCKET.IO IMPORTS
-import openSocket from 'socket.io-client';
+import React, { Component } from 'react';
 //COMPONENTS
 import Gifs from './Gifs';
+import FileUpload from './FileUpload';
 //STYLES
 import styled from 'styled-components';
 const MasterContainer = styled.div`
     display: flex;
+    height: 100vh;
+    overflow-y: scroll;  
 `
 const ChatContainer = styled.div`
     width: 100%;
-    
+    height: 90%;
+    margin-left: 100px;
+
 `
 const Form = styled.form`
     display: flex;
-    justify-content: center;
-    width: 100%;
+    width: 80%;
 `
 const Input = styled.input`
     width: 75%;
@@ -34,123 +36,188 @@ const Button = styled.button`
 `
 const MessageContainer = styled.div`
     background-color: white;
-    height: 400px;
-    max-width: 90%;
-    padding: 10px;
-    margin: 0 auto;
-    margin-top: 20px;
-    ovreflow-y: scroll;    
+    height: 90%;
+    width: 73.5%;
+    margin-top: 100px;  
+    overflow-y: scroll; 
+    /* width */
+    ::-webkit-scrollbar {
+    width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    }
+`
+const FriendContainer = styled.div`
+    background-color: white;
+    border-left: 5px solid lightblue;
+    height: 100vh;
+    width: 15%;
+    position: fixed;
+    right: 0px;
+    margin-top: 60px;
 `
 
-function Chat(props){
+class Chat extends Component {
 
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const [messageState, setMessageState] = useState(false);
-    const [gifs, setGifs] = useState(false);
-
-    //Create Socket.io connection
-    const socketio = openSocket('http://localhost:8001');;
-    // Create WebSocket connection
-    const socket = new WebSocket('ws://localhost:8080') 
-    // Log socket state
-    useEffect(() => {
-        props.connection(socket.readyState)
-        setInterval(() => tick(), 1000)
-    }, [])
-    function tick() {
-        props.connection(socket.readyState);
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            input: '',
+            gifs: false,
+            file: false
+        }
     }
+
+    // const [messages, setMessages] = useState([]);
+    // const [input, setInput] = useState('');
+    // const [messageState, setMessageState] = useState(false);
+    // const [gifs, setGifs] = useState(false);
+
+    componentDidMount() {
+        this.props.socketio.on('chat message', async (msg) => {
+            let newMessage = await msg;
+            this.setState({messages: [...this.state.messages, newMessage]})
+            console.log(this.state.messages)
+        })
+    }   
+    // Create WebSocket connection
+    //const socket = new WebSocket('ws://localhost:8080') 
+    // Log socket state
+    // useEffect(() => {
+    //     props.connection(socket.readyState)
+    //     setInterval(() => tick(), 1000)
+    // }, [])
+    // function tick() {
+    //     props.connection(socket.readyState);
+    // }
 
     // Listen for messages
-    socket.onopen = (message) => {
-        console.log('Thanks for connecting to the socket!', message);
-    }
+    // socket.onopen = (message) => {
+    //     console.log('Thanks for connecting to the socket!', message);
+    // }
 
-    function getMessage(message){
-        return new Promise((resolve) => {
-            resolve(message);
+    // function getMessage(message){
+    //     return new Promise((resolve) => {
+    //         resolve(message);
+    //     });
+    // }
+
+    // socket.onmessage = (message) => {
+    //     console.log(`Received a message from a client ${message.data}`)
+    //     getMessage(message)
+    //         .then((res) => {
+    //             //console.log(res);
+    //             let parse = JSON.parse(res.data);
+    //             const newMessage = parse.data.text;
+    //             try {
+    //                 //Add message data to array 
+    //                 setMessages([ ...messages, newMessage ]);
+    //                 setMessageState(true);
+    //             } catch (e) {
+    //                 console.log('Invalid JSON: ', message.data);
+    //                 alert('Could not send message!');
+    //                 return;
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // } 
+    // socket.onerror = (err) => {
+    //     //alert('There was an error connecting to the server!');
+    //     console.log(err);
+    // }
+
+    // function sendMessage(input) {
+    //     return new Promise((resolve) => {
+    //         resolve(input)
+    //     })
+    // }
+
+    //HANDLE GIFS
+    handleGifs = (e) => {
+        e.preventDefault();
+        this.setState({gifs: true});
+    }
+    
+    handleChange = (e) => {
+        e.preventDefault();
+        this.setState({
+            input: e.target.value
         });
     }
 
-    socket.onmessage = (message) => {
-        console.log(`Received a message from a client ${message.data}`)
-        getMessage(message)
-            .then((res) => {
-                //console.log(res);
-                let parse = JSON.parse(res.data);
-                const newMessage = parse.data.text;
-                try {
-                    //Add message data to array 
-                    setMessages([ ...messages, newMessage ]);
-                    setMessageState(true);
-                } catch (e) {
-                    console.log('Invalid JSON: ', message.data);
-                    alert('Could not send message!');
-                    return;
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    } 
-    socket.onerror = (err) => {
-        //alert('There was an error connecting to the server!');
-        console.log(err);
-    }
-    
-    function sendMessage(input) {
-        return new Promise((resolve) => {
-            resolve(input)
-        })
+    //HANDLE FILE UPLOAD
+    handleFile = (e) => {
+        e.preventDefault();
+        this.setState({file: true});
+        console.log(document.getElementById('upload'));
     }
 
-    //HANDLE GIFS
-    const handleGifs = (e) => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        setGifs(true);
-    }
-    
-    const handleChange = (e) => {
-        e.preventDefault();
-        setInput(e.target.value);
+        console.log('message sent: ', this.state.input);
+        this.props.socketio.emit('chat message', this.state.input);
+        // sendMessage(input)
+        //     .then((res) => {
+        //         props.socketio.emit('chat message', res);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
+        this.setState({input: ''});
+        return false;
+        // sendMessage(input)
+        //     .then((res) => {
+        //         socket.send(res);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     })
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        sendMessage(input)
-            .then((res) => {
-                socket.send(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-    console.log(gifs);
+    render() {
     return (
         <MasterContainer>
             <ChatContainer>
-            <MessageContainer>
-                {messages.map((message) => <p>{message}</p>)}
-                {gifs ? <Gifs /> : null}
-            </MessageContainer>
-            <Form onSubmit={handleSubmit}>
-                <Input
-                    placeholder="message"
-                    name="message"
-                    onChange={handleChange}
-                >
-                </Input>
-                <Button type="button" onClick={(e) => gifs ? setGifs(false) : handleGifs(e)}>Gif</Button>
-                <Button type="button">{'📎'}</Button>
-                <Button type="button">{'😁'}</Button>
-            </Form>
+                <MessageContainer>
+                    {this.state.messages.map((message, index) => <p key={index}>{message}</p>)}
+                    {this.state.gifs ? <Gifs /> : null}
+                    {this.state.file ? <FileUpload /> : null}
+                </MessageContainer>
+                <Form onSubmit={(e) => this.handleSubmit(e)}>
+                    <Input
+                        placeholder="message"
+                        name="message"
+                        value={this.input}
+                        onChange={this.handleChange}
+                    >
+                    </Input>
+                    <Button type="button" onClick={(e) => this.state.gifs ? this.setState({gifs: false}) : this.handleGifs(e)}>Gif</Button>
+                    <Button type="button" id="uploadButton" onClick={(e) => this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}</Button>
+                    <Button type="button">{'😁'}</Button>
+                </Form>
             </ChatContainer>
-            <div>
-                <h1>Friends</h1>
-            </div>
+            <FriendContainer>
+                <h3>Friends</h3>
+            </FriendContainer>
         </MasterContainer>
-    )
+        )
+    }
 }
 
 export default Chat;

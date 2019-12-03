@@ -3,17 +3,25 @@ import axios from 'axios';
 
 import styled from 'styled-components';
 const Input = styled.input`
-    bacgkround-color: grey;
+    width: 90%;
     padding: 5px;
     border: none;
+    border-top: 5px solid lightblue;
     -webkit-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
 `
 const GifStyle = styled.div`
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: scroll;
-    
+    position: relative;
+    background-color: lightgrey;
+`
+const Iframe = styled.iframe`
+    border: none;
+    background-color: grey;
+    padding: 10px;
+    margin: 10px;
 `
 
 function Gifs() {
@@ -23,7 +31,7 @@ function Gifs() {
 
     //GET TRENDING GIFS
     useEffect(() => {
-        axios.get(`http://api.giphy.com/v1/gifs/trending?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&limit=5`)
+        axios.get(`http://api.giphy.com/v1/gifs/trending?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&limit=8`)
             .then((res) => {
                 console.log(res.data);
                 setTrendingGifs(res.data.data);
@@ -35,16 +43,23 @@ function Gifs() {
     }, [])
     
     //SEARCH FOR GIFS
-    useEffect(() => {
-        axios.get(`http://api.giphy.com/v1/gifs/search?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&q=${input}&limit=5`)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axios.get(`http://api.giphy.com/v1/gifs/search?api_key=U8UKw35ueyklFWh3eMu1korjjQHekuqu&q=${input}&limit=8`)
             .then((res) => {
+                setTrendingGifs(res.data.data);
                 console.log(res.data)
             })
             .catch((err) => {
                 console.log(err);
                 alert('Couldn\'t get gifs 😭')
             })
-    },[input])
+    }
+
+    //SEND GIF
+    const clickGif = () => {
+        alert('you clicked the gif! :D')
+    }
 
     const handleChanges = (e) => {
         e.preventDefault();
@@ -59,16 +74,20 @@ function Gifs() {
                 <GifStyle>
                     {trendingGifs.map((gif) => {
                         return (
-                            <iframe src={gif.embed_url} /> 
+                            <div onClick={clickGif}>
+                                <Iframe src={gif.embed_url} /> 
+                            </div>
                         )
                     })}
                 </GifStyle>
-                <Input
-                    placeholder="search"
-                    name="gif"
-                    onChange={handleChanges}
-                >
-                </Input>
+                <form onSubmit={handleSubmit}>
+                    <Input
+                        placeholder="search"
+                        name="gif"
+                        onChange={handleChanges}
+                    >
+                    </Input>
+                </form>
             </div>
         )
     } else return 'Loading...'
