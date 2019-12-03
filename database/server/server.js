@@ -1,5 +1,5 @@
-//DUMMY DATA
-const dummyData = ["tyler", "faythe", "ellie"];
+//HEROKU
+const PORT = process.env.PORT || 8080
 //CONECTED CLIENTS
 let clients = [];
 let history = [];
@@ -10,13 +10,9 @@ const app = require('express')();
 const server = require('http').Server(app);
 //CREATE SOCKET.IO SERVER
 const io = require('socket.io')(server);
-server.listen(8080, () => {
-    console.log('***Socket server is running on 8080')
+server.listen(PORT, () => {
+    console.log(`***Socket server is running on ${PORT}***`)
 })
-
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
 
 //WEBSOCKET SERVER
 // const server = http.createServer((req, res) => {
