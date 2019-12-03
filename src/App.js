@@ -57,7 +57,7 @@ function App() {
 
   const [socketState, setSocketState] = useState();
   // Create Socket.io connection
-  const socketio = io('http://localhost:8080');
+  const socketio = io('https://superchatt.herokuapp.com/');
 
   return (
     <div className="App">
