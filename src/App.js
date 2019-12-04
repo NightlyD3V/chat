@@ -9,6 +9,7 @@ import Chat from './components/Chat';
 import logo from './images/chat.png';
 //STYLES
 import styled from 'styled-components';
+
 const Header = styled.h1`
   margin: 0px;
   margin-right: 10px;
@@ -65,12 +66,15 @@ function App() {
   const socketio = io('https://superchatt.herokuapp.com/');
 
   useEffect(() => {
+    socketio.emit('client connected')
+  },[])
+
+  useEffect(() => {
     socketio.on('client connected', async (res) => {
-      console.log(res);
-      let clients = await res;
-      setClients(clients);
+      let client = await res;
+      setClients(client);
     })
-  })
+  }, [clients])
 
   return (
     <div className="App">
@@ -80,7 +84,7 @@ function App() {
               <Header>Chat</Header>
               <img src={logo} style={{ width: '50px', height: '50px' }}/>
             </div>
-            <p style={{ color: 'white', marginRight: '10px'}}>Online Users: {clients}</p>
+            <p style={{ color: 'white', marginRight: '10px'}}>Online: {clients}</p>
             <LinkContainer>
             <Time connection={socketState}/>
             </LinkContainer>
