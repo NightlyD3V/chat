@@ -8,16 +8,29 @@ const MasterContainer = styled.div`
     display: flex;
     height: 100vh;
     width: 80%;
+    /* Media Query */
+    @media (max-width: 800px) {
+        height: 90vh
+        width: 100%;
+        margin: 0 auto;
+        margin-bottom: 80px;
+    }
 `
 const ChatContainer = styled.div`
     width: 100%;
     height: 90%;
     margin-left: 100px;
-
+    @media (max-width: 800px) {
+        margin: 0 auto;
+    }
 `
 const Form = styled.form`
     display: flex;
     width: 80%;
+    /* Media Query */
+    @media (max-width: 800px) {
+        width: 100%;
+    }
 `
 const Input = styled.input`
     width: 75%;
@@ -27,12 +40,20 @@ const Input = styled.input`
     -webkit-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
+    /* Media Query */
+    @media (max-width: 800px) {
+        width: 100%;
+    }
 `
 const Button = styled.button`
     width: 5%;
     border: none;
     border-top: 5px solid lightblue;
     border-left: 1px solid grey;
+    @media (max-width: 800px) {
+        width: 10%;
+        margin: 0 auto;
+    }
 `
 const MessageContainer = styled.div`
     background-color: white;
@@ -59,6 +80,10 @@ const MessageContainer = styled.div`
     ::-webkit-scrollbar-thumb:hover {
     background: #555;
     }
+    /* Media Query */
+    @media (max-width: 800px) {
+        width: 100%;
+    }
 `
 const Messages = styled.div`
     p:nth-child(odd) { background: #eee; }
@@ -72,6 +97,10 @@ const FriendContainer = styled.div`
     position: fixed;
     right: 0px;
     margin-top: 60px;
+    /* Media Query */
+    @media (max-width: 800px) {
+        display: none;
+    }
 `
 
 class Chat extends Component {

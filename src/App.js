@@ -71,8 +71,6 @@ function App() {
               <img src={logo} style={{ width: '50px', height: '50px' }}/>
             </div>
             <LinkContainer>
-              <Links>Login</Links>
-              <Links>Logout</Links>
             <Time connection={socketState}/>
             </LinkContainer>
           </NavContainer>
