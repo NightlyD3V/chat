@@ -59,8 +59,15 @@ const Connecting = styled.h3`
 function App() {
 
   const [socketState, setSocketState] = useState();
+  const [clients, setClients] = useState(0);
+
   // Create Socket.io connection
   const socketio = io('https://superchatt.herokuapp.com/');
+
+  socketio.on('client connected', async (res) => {
+    let clients = await res;
+    setClients(clients);
+  })
 
   return (
     <div className="App">
@@ -70,6 +77,7 @@ function App() {
               <Header>Chat</Header>
               <img src={logo} style={{ width: '50px', height: '50px' }}/>
             </div>
+            <p style={{ color: 'white', marginRight: '10px'}}>Online Users: {clients}</p>
             <LinkContainer>
             <Time connection={socketState}/>
             </LinkContainer>
