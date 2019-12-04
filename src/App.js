@@ -64,9 +64,12 @@ function App() {
   // Create Socket.io connection
   const socketio = io('https://superchatt.herokuapp.com/');
 
-  socketio.on('client connected', async (res) => {
-    let clients = await res;
-    setClients(clients);
+  useEffect(() => {
+    socketio.on('client connected', async (res) => {
+      console.log(res);
+      let clients = await res;
+      setClients(clients);
+    })
   })
 
   return (
