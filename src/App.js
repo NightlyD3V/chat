@@ -5,10 +5,13 @@ import io from 'socket.io-client';
 //COMPONENTS
 import Time from './components/Time';
 import Chat from './components/Chat';
+//IMAGES
+import logo from './images/chat.png';
 //STYLES
 import styled from 'styled-components';
 const Header = styled.h1`
   margin: 0px;
+  margin-right: 10px;
   color: white;
   margin-left: 20px;
   font-family: 'Fjalla One', sans-serif;
@@ -63,7 +66,10 @@ function App() {
     <div className="App">
       <header className="App-header">
           <NavContainer>
-            <Header>Chat</Header>
+            <div style={{ display: 'flex' }}>
+              <Header>Chat</Header>
+              <img src={logo} style={{ width: '50px', height: '50px' }}/>
+            </div>
             <LinkContainer>
               <Links>Login</Links>
               <Links>Logout</Links>
@@ -71,7 +77,7 @@ function App() {
             </LinkContainer>
           </NavContainer>
           <Chat connection={setSocketState} socketio={socketio}/>
-          <footer style={{ color: 'white' }}><p>&copy;2019 @LambdaStudent</p></footer>
+          <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer>
       </header>
     </div>
   );

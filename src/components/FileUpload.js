@@ -1,5 +1,4 @@
 import React from 'react';
-import upload from '../images/upload.png'
 import styled from 'styled-components';
 
 const MasterContainer = styled.div`

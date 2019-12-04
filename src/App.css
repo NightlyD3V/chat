@@ -1,7 +1,9 @@
+body {
+  background-color: #282828;
+}
 .App {
   text-align: center;
   height: 100%;
-  background-color: #282828;
 }
 
 /* width */

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const MasterContainer = styled.div`
     display: flex;
     height: 100vh;
-    overflow-y: scroll;  
+    width: 80%;
 `
 const ChatContainer = styled.div`
     width: 100%;
