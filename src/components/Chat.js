@@ -60,6 +60,10 @@ const MessageContainer = styled.div`
     background: #555;
     }
 `
+const Messages = styled.div`
+    p:nth-child(odd) { background: #eee; }
+    
+`
 const FriendContainer = styled.div`
     background-color: white;
     border-left: 5px solid lightblue;
@@ -171,6 +175,7 @@ class Chat extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         console.log('message sent: ', this.state.input);
+        this.setState({input: ''});
         this.props.socketio.emit('chat message', this.state.input);
         // sendMessage(input)
         //     .then((res) => {
@@ -179,7 +184,6 @@ class Chat extends Component {
         //     .catch((err) => {
         //         console.log(err);
         //     });
-        this.setState({input: ''});
         return false;
         // sendMessage(input)
         //     .then((res) => {
@@ -195,7 +199,9 @@ class Chat extends Component {
         <MasterContainer>
             <ChatContainer>
                 <MessageContainer>
-                    {this.state.messages.map((message, index) => <p key={index}>{message}</p>)}
+                    <Messages>
+                        {this.state.messages.map((message, index) => <p style={{padding: '10px', margin: '0 auto'}} key={index}>{message}</p>)}
+                    </Messages>
                     {this.state.gifs ? <Gifs /> : null}
                     {this.state.file ? <FileUpload /> : null}
                 </MessageContainer>
