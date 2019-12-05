@@ -1,10 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+//IMAGES
+import logo from '../images/chat.png';
+//STYLES
+import styled from 'styled-components';
+const MasterContainer = styled.div`
+    margin: 0 auto;
+    background-color: white;
+    width: 50%;
+    height: 400px;
+`
+const Header = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: grey;
+    padding: 20px;
+`
+const Input = styled.input`
+    width: 50%;
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    border-bottom: 5px solid lightblue
+`
 
-function Login() {
+function Login(props) {
+    
+    const [userData, setUserData] = useState({});
+
+    const login = (e) => {
+        e.preventDefault();
+        axios.post('https://superchatt.herokuapp.com/api/users/login', userData)
+            .then((res) => {
+                console.log(res);
+                props.history.push('/');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const handleChange = (e) => {
+        e.preventDefault(e);
+        setUserData(e.target.value);
+    }
+
     return (
-        <div>
-            <h1>Login</h1>
-        </div>
+        <MasterContainer>
+            <Header>
+                <h1 style={{ marginRight: '20px' }}>Login to Chat</h1>
+                <img src={logo} style={{ width: '50px', height: '50px' }}/>
+            </Header>
+            <Form>
+                <Input
+                    placeholder='username'
+                    value='username'
+                    onChange={handleChange}
+                >
+                </Input>
+                <Input
+                    placeholder='password'
+                    value='password'
+                    onChange={handleChange}
+                >
+                </Input>
+                <button onClick={login}>Login</button>
+            </Form>
+            <h3>Don't have an account?</h3>
+        </MasterContainer>
     )
 }
 

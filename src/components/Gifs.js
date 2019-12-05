@@ -17,11 +17,15 @@ const GifStyle = styled.div`
     position: relative;
     background-color: lightgrey;
 `
+const IframeBlocker = styled.div`
+    z-index: 2;
+`
 const Iframe = styled.iframe`
     border: none;
     background-color: grey;
     padding: 10px;
     margin: 10px;
+    z-index: 1;
 `
 
 function Gifs() {
@@ -57,7 +61,10 @@ function Gifs() {
     }
 
     //SEND GIF
-    const clickGif = () => {
+    const clickGif = (e) => {
+        const gifs = document.querySelectorAll('#gifs');
+        //console.log(gifs)
+        console.log(e.target)
         alert('you clicked the gif! :D')
     }
 
@@ -72,11 +79,11 @@ function Gifs() {
             <div>
                 <h2>Trending</h2>
                 <GifStyle>
-                    {trendingGifs.map((gif) => {
+                    {trendingGifs.map((gif, key) => {
                         return (
-                            <div onClick={clickGif}>
-                                <Iframe src={gif.embed_url} /> 
-                            </div>
+                            <IframeBlocker key ={key} onClick={(e) => clickGif(e)}>
+                                <Iframe id='gifs' src={gif.embed_url} /> 
+                            </IframeBlocker>
                         )
                     })}
                 </GifStyle>

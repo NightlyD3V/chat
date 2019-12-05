@@ -204,23 +204,8 @@ class Chat extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         console.log('message sent: ', this.state.input);
-        this.setState({input: ''});
         this.props.socketio.emit('chat message', this.state.input);
-        // sendMessage(input)
-        //     .then((res) => {
-        //         props.socketio.emit('chat message', res);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
-        return false;
-        // sendMessage(input)
-        //     .then((res) => {
-        //         socket.send(res);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     })
+        this.setState({input: ''});
     }
 
     render() {
