@@ -7,7 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 //SOCKET.IO IMPORT
 import io from 'socket.io-client';
-let socketio = io('https://cors-anywhere.superchatt.herokuapp.com/');
+let socketio = io('https://superchatt.herokuapp.com/');
 
 class App extends Component {
 
