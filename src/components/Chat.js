@@ -37,6 +37,7 @@ const Input = styled.input`
     padding: 10px;
     border: none;
     border-top: 5px solid lightblue;
+    border-radius: none;
     -webkit-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.75);
@@ -48,6 +49,7 @@ const Input = styled.input`
 const Button = styled.button`
     width: 5%;
     border: none;
+    background-color: #d7f4f3
     border-top: 5px solid lightblue;
     border-left: 1px solid grey;
     @media (max-width: 800px) {
@@ -58,7 +60,7 @@ const Button = styled.button`
 const MessageContainer = styled.div`
     background-color: white;
     height: 90%;
-    width: 73.5%;
+    width: 77.5%;
     margin-top: 100px;  
     overflow-y: scroll; 
     /* width */
@@ -203,9 +205,12 @@ class Chat extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log('message sent: ', this.state.input);
-        this.props.socketio.emit('chat message', this.state.input);
-        this.setState({input: ''});
+        document.getElementById('form').reset();
+        //console.log('message sent: ', this.state.input);
+        if(this.state.input.length === 0) {
+            alert('Please enter a message!');
+        }
+        this.props.socketio.emit('chat message', this.state.input);;
     }
 
     render() {
@@ -219,7 +224,7 @@ class Chat extends Component {
                     {this.state.gifs ? <Gifs /> : null}
                     {this.state.file ? <FileUpload /> : null}
                 </MessageContainer>
-                <Form onSubmit={(e) => this.handleSubmit(e)}>
+                <Form id="form" onSubmit={(e) => this.handleSubmit(e)}>
                     <Input
                         placeholder="message"
                         name="message"
@@ -228,6 +233,7 @@ class Chat extends Component {
                     >
                     </Input>
                     {/* <Button type="button" onClick={(e) => this.handleSubmit(e)}></Button> */}
+                    <Button type="button" onClick={(e) => this.handleSubmit(e)}>Send</Button>
                     <Button type="button" onClick={(e) => this.state.gifs ? this.setState({gifs: false}) : this.handleGifs(e)}>Gif</Button>
                     <Button type="button" id="uploadButton" onClick={(e) => this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}</Button>
                     <Button type="button">{'😁'}</Button>

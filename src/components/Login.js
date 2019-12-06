@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 //IMAGES
 import logo from '../images/chat.png';
@@ -32,10 +33,11 @@ const Input = styled.input`
 
 function Login(props) {
     
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState();
 
     const login = (e) => {
         e.preventDefault();
+        console.log(userData);
         axios.post('https://superchatt.herokuapp.com/api/users/login', userData)
             .then((res) => {
                 console.log(res);
@@ -47,8 +49,8 @@ function Login(props) {
     }
 
     const handleChange = (e) => {
-        e.preventDefault(e);
-        setUserData(e.target.value);
+        e.preventDefault();
+        setUserData({...userData, [e.target.name] : e.target.value});
     }
 
     return (
@@ -60,19 +62,19 @@ function Login(props) {
             <Form>
                 <Input
                     placeholder='username'
-                    value='username'
+                    name='username'
                     onChange={handleChange}
                 >
                 </Input>
                 <Input
                     placeholder='password'
-                    value='password'
+                    name='password'
                     onChange={handleChange}
                 >
                 </Input>
                 <button onClick={login}>Login</button>
             </Form>
-            <h3>Don't have an account?</h3>
+            <Link to='/register'><h3>Don't have an account?</h3></Link>
         </MasterContainer>
     )
 }

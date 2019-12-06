@@ -101,7 +101,7 @@ class Home extends Component {
                     <Time connection={this.state.socketState}/>
                     </LinkContainer>
                 </NavContainer>
-                <Chat connection={this.state.setSocketState} socketio={this.props.socketio}/>
+                <Chat connection={this.state.SocketState} socketio={this.props.socketio}/>
                 <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer>
             </div>
         )
