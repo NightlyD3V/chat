@@ -8,28 +8,31 @@ import logo from '../images/chat.png';
 import styled from 'styled-components';
 
 const Header = styled.h1`
-  margin: 0px;
-  margin-right: 10px;
-  color: white;
-  margin-left: 20px;
-  font-family: 'Fjalla One', sans-serif;
+    margin: 0px;
+    margin-right: 10px;
+    color: white;
+    margin-left: 20px;
+    font-family: 'Fjalla One', sans-serif;
 `
 const NavContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #0B0C10;
-  height: 60px;
-  position: fixed;
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #3d356b;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 20px -5px rgba(0,0,0,1);
+    -moz-box-shadow: 0px 4px 20px -5px rgba(0,0,0,1);
+    box-shadow: 0px 4px 20px -5px rgba(0,0,0,1);
 `
 const LinkContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
 `
 const Links = styled.h3`
-  color: white;
-  margin-right: 20px;
+    color: white;
+    margin-right: 20px;
 `
 const SocketState = styled.div`
     display: flex;
@@ -94,7 +97,7 @@ class Home extends Component {
                 <NavContainer>
                     <div style={{ display: 'flex' }}>
                     <Header>Chat</Header>
-                    <img src={logo} style={{ width: '50px', height: '50px' }}/>
+                    <img src={logo} style={{ width: '30px', height: '30px' }}/>
                     </div>
                     <p style={{ color: 'white', marginRight: '10px'}}>Online: {this.state.clients}</p>
                     <LinkContainer>
@@ -102,7 +105,7 @@ class Home extends Component {
                     </LinkContainer>
                 </NavContainer>
                 <Chat connection={this.state.SocketState} socketio={this.props.socketio}/>
-                <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer>
+                {/* <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer> */}
             </div>
         )
     }

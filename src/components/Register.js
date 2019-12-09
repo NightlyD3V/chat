@@ -20,7 +20,7 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: grey;
+    background-color: #3d356b;
     padding: 20px;
 `
 const Input = styled.input`
@@ -38,6 +38,7 @@ function Register(props) {
     const register = (e) => {
         e.preventDefault();
         console.log(userData);
+        // https://superchatt.herokuapp.com/api/users/register
         axios.post('https://superchatt.herokuapp.com/api/users/register', userData)
             .then((res) => {
                 console.log(res);

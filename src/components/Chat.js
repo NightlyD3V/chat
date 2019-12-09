@@ -4,9 +4,11 @@ import Gifs from './Gifs';
 import FileUpload from './FileUpload';
 //STYLES
 import styled from 'styled-components';
+import { throwStatement } from '@babel/types';
+import { white } from 'ansi-colors';
 const MasterContainer = styled.div`
     display: flex;
-    height: 100vh;
+    height: 90vh;
     width: 80%;
     /* Media Query */
     @media (max-width: 800px) {
@@ -17,23 +19,24 @@ const MasterContainer = styled.div`
     }
 `
 const ChatContainer = styled.div`
-    width: 100%;
+    width: 70%;
     height: 90%;
-    margin-left: 100px;
+    margin-left: 500px;
     @media (max-width: 800px) {
         margin: 0 auto;
+        width: 100%;
     }
 `
 const Form = styled.form`
     display: flex;
-    width: 80%;
+    width: 100%;
     /* Media Query */
     @media (max-width: 800px) {
         width: 100%;
     }
 `
 const Input = styled.input`
-    width: 75%;
+    width: 100%;
     padding: 10px;
     border: none;
     border-top: 5px solid lightblue;
@@ -47,7 +50,7 @@ const Input = styled.input`
     }
 `
 const Button = styled.button`
-    width: 5%;
+    width: 10%;
     border: none;
     background-color: #d7f4f3
     border-top: 5px solid lightblue;
@@ -58,11 +61,10 @@ const Button = styled.button`
     }
 `
 const MessageContainer = styled.div`
-    background-color: white;
     height: 90%;
-    width: 77.5%;
+    width: 100%;
     margin-top: 100px;  
-    overflow-y: scroll; 
+    overflow-y: auto; 
     /* width */
     ::-webkit-scrollbar {
     width: 10px;
@@ -88,12 +90,10 @@ const MessageContainer = styled.div`
     }
 `
 const Messages = styled.div`
-    p:nth-child(odd) { background: #eee; }
+    h4:nth-child(odd) { background: lightgrey; color: black }
     
 `
 const FriendContainer = styled.div`
-    background-color: white;
-    border-left: 5px solid lightblue;
     height: 100vh;
     width: 15%;
     position: fixed;
@@ -104,6 +104,22 @@ const FriendContainer = styled.div`
         display: none;
     }
 `
+const Typing = styled.p`
+    width: 100%;
+    background-color: #736f96;
+    margin: 0px;
+    padding: 10px 0px 10px 0px;
+    @media (max-width: 800px) {
+        width: 100%;
+    }
+`
+const DarkMode = styled.button`
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    top: 700px;
+    width: 90%;
+`
 
 class Chat extends Component {
 
@@ -111,9 +127,12 @@ class Chat extends Component {
         super(props);
         this.state = {
             messages: [],
+            date: '',
+            typing: false,
             input: '',
             gifs: false,
-            file: false
+            file: false,
+            darkMode: false
         }
     }
 
@@ -123,11 +142,16 @@ class Chat extends Component {
     // const [gifs, setGifs] = useState(false);
 
     componentDidMount() {
-        this.props.socketio.on('chat message', async (msg) => {
+        //LISTEN FOR USER TYPING
+        this.props.socketio.on('typing', async () => {
+            this.setState({typing: true});
+        });
+        //LISTEN FOR MESSAGES
+        this.props.socketio.on('chat message', async (msg, date) => {
             let newMessage = await msg;
             this.setState({messages: [...this.state.messages, newMessage]})
             console.log(this.state.messages)
-        })
+        });
     }   
     // Create WebSocket connection
     //const socket = new WebSocket('ws://localhost:8080') 
@@ -183,6 +207,12 @@ class Chat extends Component {
     //     })
     // }
 
+    //DARK MODE
+    darkMode = (e) => {
+        e.preventDefault();
+        this.setState({ darkMode : true })
+    }
+
     //HANDLE GIFS
     handleGifs = (e) => {
         e.preventDefault();
@@ -191,6 +221,7 @@ class Chat extends Component {
     
     handleChange = (e) => {
         e.preventDefault();
+        this.props.socketio.emit('typing');
         this.setState({
             input: e.target.value
         });
@@ -205,25 +236,43 @@ class Chat extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({typing: false})
         document.getElementById('form').reset();
         //console.log('message sent: ', this.state.input);
         if(this.state.input.length === 0) {
-            alert('Please enter a message!');
+            alert('Please enter a message!'); 
+            return null;
         }
-        this.props.socketio.emit('chat message', this.state.input);;
+        this.props.socketio.emit('chat message', this.state.input);
     }
 
     render() {
     return (
         <MasterContainer>
             <ChatContainer>
-                <MessageContainer>
+                <MessageContainer style= {
+                    this.state.darkMode ? 
+                    {backgroundColor: 'black', color: 'white'} :
+                    {backgroundColor: '#736f96', color: 'white'} 
+                    }>
                     <Messages>
-                        {this.state.messages.map((message, index) => <p style={{padding: '10px', margin: '0 auto'}} key={index}>{message}</p>)}
+                        {this.state.messages.map((message, index) => {
+                            return (
+                            <h4 style= {
+                                {padding: '10px', margin: '0 auto'}} key={index}>{message}
+                            </h4>
+                        )})}
                     </Messages>
                     {this.state.gifs ? <Gifs /> : null}
                     {this.state.file ? <FileUpload /> : null}
                 </MessageContainer>
+                <Typing style= {
+                    this.state.typing ?
+                    {visibility: 'visible'} :
+                    {color: '#736f96'} 
+                }>
+                A user is typing!...
+                </Typing>
                 <Form id="form" onSubmit={(e) => this.handleSubmit(e)}>
                     <Input
                         placeholder="message"
@@ -232,15 +281,25 @@ class Chat extends Component {
                         onChange={this.handleChange}
                     >
                     </Input>
-                    {/* <Button type="button" onClick={(e) => this.handleSubmit(e)}></Button> */}
-                    <Button type="button" onClick={(e) => this.handleSubmit(e)}>Send</Button>
-                    <Button type="button" onClick={(e) => this.state.gifs ? this.setState({gifs: false}) : this.handleGifs(e)}>Gif</Button>
-                    <Button type="button" id="uploadButton" onClick={(e) => this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}</Button>
+                    <Button type="button" onClick={(e) => 
+                        this.handleSubmit(e)}>Send
+                    </Button>
+                    <Button type="button" onClick={(e) => 
+                        this.state.gifs ? this.setState({gifs : false}) : this.handleGifs(e)}>Gif
+                    </Button>
+                    <Button type="button" id="uploadButton" onClick={(e) => 
+                        this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}
+                    </Button>
                     <Button type="button">{'😁'}</Button>
                 </Form>
             </ChatContainer>
-            <FriendContainer>
+            <FriendContainer style= { 
+                this.state.darkMode ? 
+                {backgroundColor: '#0B0C10', color: 'white'} : 
+                {backgroundColor: '#736f96', color: 'black'}
+                }>
                 <h3>Friends</h3>
+                <DarkMode onClick={(e) => this.state.darkMode ? this.setState({darkMode : false}) : this.darkMode(e)}>Dark Mode</DarkMode>
             </FriendContainer>
         </MasterContainer>
         )

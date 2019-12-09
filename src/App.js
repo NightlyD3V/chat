@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 //SOCKET.IO IMPORT
 import io from 'socket.io-client';
+// https://superchatt.herokuapp.com/
 let socketio = io('https://superchatt.herokuapp.com/');
 
 class App extends Component {
@@ -21,7 +22,7 @@ class App extends Component {
   // )
 
   componentDidMount() {
-    console.log('app client connected')
+    //console.log('app client connected')
     socketio.emit('client connected');
   }
 

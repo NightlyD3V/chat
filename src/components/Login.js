@@ -20,7 +20,7 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: grey;
+    background-color: #3d356b;
     padding: 20px;
 `
 const Input = styled.input`
