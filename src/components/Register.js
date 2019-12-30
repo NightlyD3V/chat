@@ -39,7 +39,7 @@ function Register(props) {
         e.preventDefault();
         console.log(userData);
         // https://superchatt.herokuapp.com/api/users/register
-        axios.post('https://superchatt.herokuapp.com/api/users/register', userData)
+        axios.post('http://localhost:8080/api/users/register', userData)
             .then((res) => {
                 console.log(res);
                 props.history.push('/');
@@ -63,13 +63,14 @@ function Register(props) {
             <Form>
                 <Input
                     placeholder='username'
-                    name='username'
+                    name='name'
                     onChange={handleChange}
                 >
                 </Input>
                 <Input
                     placeholder='password'
                     name='password'
+                    type='password'
                     onChange={handleChange}
                 >
                 </Input>

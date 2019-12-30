@@ -15,7 +15,7 @@ function Time(props) {
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', marginRight: "20px"}}>
-            <h3 style={{ color: "white" }}>{time}</h3>
+            <h3>{time}</h3>
             {props.connection === 0 ? '🔴' : '📶'}
         </div>
     )

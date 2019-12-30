@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { UserSession } from 'blockstack';
+import { appConfig, ME_FILENAME } from './blockstack/constants';
 import axios from 'axios';
 //IMAGES
 import logo from '../images/chat.png';
@@ -7,6 +9,7 @@ import logo from '../images/chat.png';
 import styled from 'styled-components';
 const MasterContainer = styled.div`
     margin: 0 auto;
+    margin-top: 200px;
     background-color: white;
     width: 50%;
     height: 400px;
@@ -31,52 +34,102 @@ const Input = styled.input`
     border-bottom: 5px solid lightblue
 `
 
-function Login(props) {
+const userSession = new UserSession({ appConfig })
+
+class Login extends Component {
+
+    constructor(props) {
+        super(props)
+        this.loadMe = this.loadMe.bind(this)
+        this.state = {
+            me: {},
+            userData: '',
+            redirectToMe: false,
+        }
+    }
     
-    const [userData, setUserData] = useState();
+    //const [userData, setUserData] = useState();
 
-    const login = (e) => {
-        e.preventDefault();
-        console.log(userData);
-        axios.post('https://superchatt.herokuapp.com/api/users/login', userData)
-            .then((res) => {
-                console.log(res);
-                props.history.push('/');
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+    componentWillMount() {
+        this.loadMe()
+        console.log(this.state.userSession)
+        const session = userSession
+        if(!session.isUserSignedIn() && session.isSignInPending()) {
+        session.handlePendingSignIn()
+        .then((userData) => {
+            if(!userData.username) {
+            throw new Error('This app requires a username.')
+            }
+            window.location = `/kingdom/${userData.username}`
+        })
+        }
     }
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        setUserData({...userData, [e.target.name] : e.target.value});
+    loadMe() {
+        const options = { decrypt: false }
+        userSession.getFile(ME_FILENAME, options)
+        .then((content) => {
+          if(content) {
+            const me = JSON.parse(content)
+            this.setState({me, redirectToMe: false})
+          } else {
+            const me = null
+            this.setState({me, redirectToMe: true})
+          }
+        })
     }
 
-    return (
-        <MasterContainer>
-            <Header>
-                <h1 style={{ marginRight: '20px' }}>Login to Chat</h1>
-                <img src={logo} style={{ width: '50px', height: '50px' }}/>
-            </Header>
-            <Form>
-                <Input
-                    placeholder='username'
-                    name='username'
-                    onChange={handleChange}
-                >
-                </Input>
-                <Input
-                    placeholder='password'
-                    name='password'
-                    onChange={handleChange}
-                >
-                </Input>
-                <button onClick={login}>Login</button>
-            </Form>
-            <Link to='/register'><h3>Don't have an account?</h3></Link>
-        </MasterContainer>
-    )
+    login = (e) => {
+        e.preventDefault();
+        //console.log(userData);
+        //LOGIN THROUGH BLOCKSTACK
+       userSession.redirectToSignIn()
+        // https://superchatt.herokuapp.com/api/users/login
+        // axios.post('http://localhost:8080/api/users/login', userData)
+        //     .then((res) => {
+        //         console.log(res);
+        //         props.history.push('/');
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     })
+    }
+
+    handleChange = (e) => {
+        e.preventDefault();
+        this.setState({
+            userData: e.target.value
+        })
+        //setUserData({...userData, [e.target.name] : e.target.value});
+    }
+
+    render() {
+        return (
+            <MasterContainer>
+                <Header>
+                    <h1 style={{ marginRight: '20px' }}>Login to Chat</h1>
+                    <img src={logo} style={{ width: '50px', height: '50px' }}/>
+                </Header>
+                <Form>
+                    <Input
+                        placeholder='username'
+                        name='username'
+                        onChange={this.handleChange}
+                    >
+                    </Input>
+                    <Input
+                        placeholder='password'
+                        name='password'
+                        type='password'
+                        onChange={this.handleChange}
+                    >
+                    </Input>
+                    <button onClick={this.login}>Login</button>
+                </Form>
+                <Link to='/register'><h3>Don't have an account?</h3></Link>
+            </MasterContainer>
+        )
+    }
 }
 
 export default Login;

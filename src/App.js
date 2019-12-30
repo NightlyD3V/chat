@@ -8,7 +8,7 @@ import Register from './components/Register';
 //SOCKET.IO IMPORT
 import io from 'socket.io-client';
 // https://superchatt.herokuapp.com/
-let socketio = io('https://superchatt.herokuapp.com/');
+let socketio = io('http://localhost:8080');
 
 class App extends Component {
 

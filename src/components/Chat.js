@@ -99,6 +99,9 @@ const FriendContainer = styled.div`
     position: fixed;
     right: 0px;
     margin-top: 60px;
+    -webkit-box-shadow: -6px 0px 20px -5px rgba(0,0,0,1);
+    -moz-box-shadow: -6px 0px 20px -5px rgba(0,0,0,1);
+    box-shadow: -6px 0px 20px -5px rgba(0,0,0,1);
     /* Media Query */
     @media (max-width: 800px) {
         display: none;
@@ -130,6 +133,7 @@ class Chat extends Component {
             date: '',
             typing: false,
             input: '',
+            gif: [],
             gifs: false,
             file: false,
             darkMode: false
@@ -152,6 +156,11 @@ class Chat extends Component {
             this.setState({messages: [...this.state.messages, newMessage]})
             console.log(this.state.messages)
         });
+        //LISTEN FOR GIFS
+        this.props.socketio.on('gif', async (gif) => {
+            let newGif = await gif;
+            this.setState({gif: [...this.state.gif, newGif]});
+        })
     }   
     // Create WebSocket connection
     //const socket = new WebSocket('ws://localhost:8080') 
@@ -263,7 +272,12 @@ class Chat extends Component {
                             </h4>
                         )})}
                     </Messages>
-                    {this.state.gifs ? <Gifs /> : null}
+                    {this.state.gif.map((newGif) => {
+                        return (
+                            <iframe style={{border: 'none'}} src={newGif}/>
+                        )
+                    })}
+                    {this.state.gifs ? <Gifs socketio={this.props.socketio}/> : null}
                     {this.state.file ? <FileUpload /> : null}
                 </MessageContainer>
                 <Typing style= {

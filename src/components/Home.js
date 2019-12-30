@@ -10,7 +10,7 @@ import styled from 'styled-components';
 const Header = styled.h1`
     margin: 0px;
     margin-right: 10px;
-    color: white;
+    color: black;
     margin-left: 20px;
     font-family: 'Fjalla One', sans-serif;
 `
@@ -18,7 +18,7 @@ const NavContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #3d356b;
+    background-color: whitesmoke;
     height: 60px;
     position: fixed;
     width: 100%;
@@ -31,7 +31,7 @@ const LinkContainer = styled.div`
     justify-content: space-around;
 `
 const Links = styled.h3`
-    color: white;
+    color: black;
     margin-right: 20px;
 `
 const SocketState = styled.div`
@@ -99,7 +99,7 @@ class Home extends Component {
                     <Header>Chat</Header>
                     <img src={logo} style={{ width: '30px', height: '30px' }}/>
                     </div>
-                    <p style={{ color: 'white', marginRight: '10px'}}>Online: {this.state.clients}</p>
+                    <p style={{marginRight: '10px'}}>Online: {this.state.clients}</p>
                     <LinkContainer>
                     <Time connection={this.state.socketState}/>
                     </LinkContainer>

@@ -17,21 +17,30 @@ const GifStyle = styled.div`
     position: relative;
     background-color: lightgrey;
 `
+const IframeContainer = styled.div`
+    position: relative;
+`
 const IframeBlocker = styled.div`
-    z-index: 2;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
 `
 const Iframe = styled.iframe`
     border: none;
     background-color: grey;
     padding: 10px;
     margin: 10px;
-    z-index: 1;
+    z-index: -1;
     -webkit-box-shadow: -1px 2px 18px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: -1px 2px 18px 0px rgba(0,0,0,0.75);
     box-shadow: -1px 2px 18px 0px rgba(0,0,0,0.75);
 `
 
-function Gifs() {
+function Gifs(props) {
 
     const [input, setInput] = useState('');
     const [trendingGifs, setTrendingGifs] = useState()
@@ -63,12 +72,14 @@ function Gifs() {
             })
     }
 
-    //SEND GIF
+    //GIF
     const clickGif = (e) => {
+        e.preventDefault();
+        console.log(e.target.id)
+        props.socketio.emit('gif', e.target.id);
         const gifs = document.querySelectorAll('#gifs');
         //console.log(gifs)
-        console.log(e.target)
-        alert('you clicked the gif! :D')
+        //alert('you clicked the gif! :D')
     }
 
     const handleChanges = (e) => {
@@ -84,9 +95,10 @@ function Gifs() {
                 <GifStyle>
                     {trendingGifs.map((gif, key) => {
                         return (
-                            <IframeBlocker key ={key} onClick={(e) => clickGif(e)}>
+                            <IframeContainer key ={key}>
+                                <IframeBlocker id={gif.embed_url} onClick={(e) => clickGif(e)}></IframeBlocker>
                                 <Iframe id='gifs' src={gif.embed_url} /> 
-                            </IframeBlocker>
+                            </IframeContainer>
                         )
                     })}
                 </GifStyle>
