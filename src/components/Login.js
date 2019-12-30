@@ -52,17 +52,6 @@ class Login extends Component {
 
     componentWillMount() {
         this.loadMe()
-        console.log(this.state.userSession)
-        const session = userSession
-        if(!session.isUserSignedIn() && session.isSignInPending()) {
-        session.handlePendingSignIn()
-        .then((userData) => {
-            if(!userData.username) {
-            throw new Error('This app requires a username.')
-            }
-            window.location = `/kingdom/${userData.username}`
-        })
-        }
     }
 
     loadMe() {
@@ -83,7 +72,7 @@ class Login extends Component {
         e.preventDefault();
         //console.log(userData);
         //LOGIN THROUGH BLOCKSTACK
-        this.userSession.redirectToSignIn()
+       userSession.redirectToSignIn()
         // https://superchatt.herokuapp.com/api/users/login
         // axios.post('http://localhost:8080/api/users/login', userData)
         //     .then((res) => {
