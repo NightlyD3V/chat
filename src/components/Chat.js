@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 //COMPONENTS
 import Gifs from './Gifs';
 import FileUpload from './FileUpload';
+//BLOCKSTACK
+import { UserSession } from 'blockstack';
+import { appConfig, ME_FILENAME } from './blockstack/constants';
 //STYLES
 import styled from 'styled-components';
-import { throwStatement } from '@babel/types';
-import { white } from 'ansi-colors';
 const MasterContainer = styled.div`
     display: flex;
     height: 90vh;
@@ -123,6 +124,7 @@ const DarkMode = styled.button`
     top: 700px;
     width: 90%;
 `
+const userSession = new UserSession({ appConfig })
 
 class Chat extends Component {
 
@@ -146,6 +148,7 @@ class Chat extends Component {
     // const [gifs, setGifs] = useState(false);
 
     componentDidMount() {
+        console.log(userSession.loadUserData().username)
         //LISTEN FOR USER TYPING
         this.props.socketio.on('typing', async () => {
             this.setState({typing: true});

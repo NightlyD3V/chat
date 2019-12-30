@@ -83,7 +83,7 @@ class Login extends Component {
         e.preventDefault();
         //console.log(userData);
         //LOGIN THROUGH BLOCKSTACK
-       userSession.redirectToSignIn()
+        this.userSession.redirectToSignIn()
         // https://superchatt.herokuapp.com/api/users/login
         // axios.post('http://localhost:8080/api/users/login', userData)
         //     .then((res) => {
