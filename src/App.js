@@ -5,10 +5,15 @@ import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom";
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
+//BLOCKSTACK
+import { UserSession } from 'blockstack';
+import { appConfig, ME_FILENAME } from './components/blockstack/constants';
 //SOCKET.IO IMPORT
 import io from 'socket.io-client';
 // https://superchatt.herokuapp.com/
 let socketio = io('https://superchatt.herokuapp.com/');
+
+const userSession = new UserSession({ appConfig })
 
 class App extends Component {
 
@@ -30,8 +35,8 @@ class App extends Component {
     return (
       <div className="App">
         {/* ROUTES */}
-        <Route exact path='/' render={((props) => <Home {...props} socketio={socketio} />)}></Route>
-        <Route path='/login' component={Login}></Route>
+        <Route exact path='/' render={((props) => <Home {...props} socketio={socketio} userSession={userSession}/>)}></Route>
+        <Route path='/login' render={((props) => <Login {...props} userSession={userSession} />)}></Route>
         <Route path='/register' component={Register}></Route>
       </div>
     ) 

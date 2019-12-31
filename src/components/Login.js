@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { UserSession } from 'blockstack';
 import { appConfig, ME_FILENAME } from './blockstack/constants';
 import axios from 'axios';
 //IMAGES
@@ -34,8 +33,6 @@ const Input = styled.input`
     border-bottom: 5px solid lightblue
 `
 
-const userSession = new UserSession({ appConfig })
-
 class Login extends Component {
 
     constructor(props) {
@@ -56,7 +53,7 @@ class Login extends Component {
 
     loadMe() {
         const options = { decrypt: false }
-        userSession.getFile(ME_FILENAME, options)
+        this.props.userSession.getFile(ME_FILENAME, options)
         .then((content) => {
           if(content) {
             const me = JSON.parse(content)
@@ -72,7 +69,7 @@ class Login extends Component {
         e.preventDefault();
         //console.log(userData);
         //LOGIN THROUGH BLOCKSTACK
-       userSession.redirectToSignIn()
+       this.props.userSession.redirectToSignIn()
         // https://superchatt.herokuapp.com/api/users/login
         // axios.post('http://localhost:8080/api/users/login', userData)
         //     .then((res) => {
