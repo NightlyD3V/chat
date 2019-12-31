@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 //COMPONENTS
 import Gifs from './Gifs';
 import FileUpload from './FileUpload';
-//BLOCKSTACK
-import { appConfig, ME_FILENAME } from './blockstack/constants';
 //STYLES
 import styled from 'styled-components';
 const MasterContainer = styled.div`
@@ -145,7 +143,7 @@ class Chat extends Component {
     // const [gifs, setGifs] = useState(false);
 
     componentDidMount() {
-        console.log(this.props.userSession.loadUserData().username)
+        console.log(this.props.userSession.loadUserData())
         //LISTEN FOR USER TYPING
         this.props.socketio.on('typing', async () => {
             this.setState({typing: true});
