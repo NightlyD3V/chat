@@ -62,7 +62,8 @@ class Home extends Component {
         super(props);
         this.state = {
             socketState: 1,
-            clients: 0
+            clients: 0,
+            username: ''
         }
     }
     // const [socketState, setSocketState] = useState();
@@ -78,6 +79,9 @@ class Home extends Component {
     
     componentWillMount() {
         const { userSession } = this.props
+        this.setState({
+            username: userSession.loadUserData().username
+        })
     }
 
     componentDidMount() {
@@ -96,6 +100,7 @@ class Home extends Component {
     // }, [clients])
 
     render() {
+        const { username } = this.state;
         return (
             <div>
                 <NavContainer>
