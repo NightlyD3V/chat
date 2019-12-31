@@ -143,7 +143,6 @@ class Chat extends Component {
     // const [gifs, setGifs] = useState(false);
 
     componentDidMount() {
-        console.log(this.props.userSession.loadUserData())
         //LISTEN FOR USER TYPING
         this.props.socketio.on('typing', async () => {
             this.setState({typing: true});

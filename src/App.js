@@ -37,7 +37,6 @@ class App extends Component {
         {/* ROUTES */}
         <Route exact path='/' render={((props) => <Home {...props} socketio={socketio} userSession={userSession}/>)}></Route>
         <Route path='/login' render={((props) => <Login {...props} userSession={userSession} />)}></Route>
-        <Route path='/register' component={Register}></Route>
       </div>
     ) 
   }
