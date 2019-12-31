@@ -15,7 +15,7 @@ let socketio = io('https://superchatt.herokuapp.com/');
 const userSession = new UserSession({ appConfig })
 
 class App extends Component {
-  //PRIVATE ROUTE
+
   // const PrivateRoute = ({ component: Component, ...rest }) => (
   //   <Route { ...rest } render={(props) => (
   //     //AUTHENTICATION
@@ -27,8 +27,8 @@ class App extends Component {
 
   componentDidMount() {
     //console.log('app client connected')
-    console.log(userSession.loadUserData().username);
     socketio.emit('a client connected');
+    console.log(userSession.loadUserData().username);
   }
 
   render() {
