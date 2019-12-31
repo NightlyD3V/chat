@@ -27,7 +27,7 @@ class App extends Component {
 
   componentDidMount() {
     //console.log('app client connected')
-    socketio.emit('client connected');
+    socketio.emit('a client connected');
   }
 
   render() {
