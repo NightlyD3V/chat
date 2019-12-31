@@ -77,7 +77,7 @@ class Home extends Component {
     // },[])
     
     componentWillMount() {
-        const { userSession } = this.this.props
+        const { userSession } = this.props
         console.log(userSession.loadUserData.username)
     }
 
