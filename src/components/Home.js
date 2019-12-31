@@ -78,7 +78,7 @@ class Home extends Component {
     
     componentWillMount() {
         const { userSession } = this.props
-        console.log(userSession.loadUserData.username)
+        console.log('username', userSession.loadUserData().username)
     }
 
     componentDidMount() {
