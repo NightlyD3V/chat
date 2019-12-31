@@ -75,11 +75,14 @@ class Home extends Component {
     // useEffect(() => {
     //     socketio.emit('client connected')
     // },[])
+    
+    componentWillMount() {
+        const { userSession } = this.this.props
+        console.log(userSession.loadUserData.username)
+    }
 
     componentDidMount() {
         console.log('home client connected')
-        const { userSession } = this.props
-        console.log(userSession.loadUserData().username)
         this.props.socketio.on('client connected', (clientCount) => {
             console.log(clientCount);
             this.setState({ clients: clientCount })
