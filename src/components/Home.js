@@ -78,7 +78,8 @@ class Home extends Component {
 
     componentDidMount() {
         console.log('home client connected')
-        console.log(this.props.userSession.loadUserData().username)
+        const { userSession } = this.props
+        console.log(userSession.loadUserData().username)
         this.props.socketio.on('client connected', (clientCount) => {
             console.log(clientCount);
             this.setState({ clients: clientCount })
