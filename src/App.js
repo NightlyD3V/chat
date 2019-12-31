@@ -4,7 +4,6 @@ import { NavLink, Switch, Route, Redirect, withRouter } from "react-router-dom";
 //COMPONENTS
 import Home from './components/Home';
 import Login from './components/Login';
-import Register from './components/Register';
 //BLOCKSTACK
 import { UserSession } from 'blockstack';
 import { appConfig, ME_FILENAME } from './components/blockstack/constants';
