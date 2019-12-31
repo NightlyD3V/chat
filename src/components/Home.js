@@ -85,6 +85,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        console.log(this.state.username)
         console.log('home client connected')
         this.props.socketio.on('client connected', (clientCount) => {
             console.log(clientCount);

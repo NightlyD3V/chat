@@ -12,10 +12,15 @@ import io from 'socket.io-client';
 // https://superchatt.herokuapp.com/
 let socketio = io('https://superchatt.herokuapp.com/');
 
-const userSession = new UserSession({ appConfig })
+const userSession = new UserSession({ appConfig: appConfig })
 
 class App extends Component {
-
+  constructor() {
+    super()
+    this.state= {
+      userData: {}
+    }
+  }
   // const PrivateRoute = ({ component: Component, ...rest }) => (
   //   <Route { ...rest } render={(props) => (
   //     //AUTHENTICATION
@@ -28,16 +33,22 @@ class App extends Component {
   componentDidMount() {
     //console.log('app client connected')
     socketio.emit('a client connected');
-    console.log(userSession.loadUserData().username);
+    if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn().then((userData) => {
+        window.history.replaceState({}, document.title, "/")
+        this.setState({ userData: userData})
+      });
+    }
   }
 
   render() {
     return (
+      !userSession.isSignInPending() ?
       <div className="App">
         {/* ROUTES */}
         <Route exact path='/' render={((props) => <Home {...props} socketio={socketio} userSession={userSession}/>)}></Route>
         <Route path='/login' render={((props) => <Login {...props} userSession={userSession} />)}></Route>
-      </div>
+      </div> : null
     ) 
   }
 }
