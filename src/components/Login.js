@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { appConfig, ME_FILENAME } from './blockstack/constants';
-import axios from 'axios';
+import { ME_FILENAME } from './blockstack/constants';
 //IMAGES
 import logo from '../images/chat.png';
+//MATERIAL
+import Button from '@material-ui/core/Button';
 //STYLES
 import styled from 'styled-components';
 const MasterContainer = styled.div`
     margin: 0 auto;
-    margin-top: 200px;
     background-color: white;
     width: 50%;
     height: 400px;
@@ -97,7 +97,11 @@ class Login extends Component {
                     <img src={logo} style={{ width: '50px', height: '50px' }}/>
                 </Header>
                 <Form>
-                    <button onClick={this.login}>Login with Blockstack</button>
+                    <Button 
+                        onClick={this.login}
+                        variant="contained"
+                        color="primary"
+                    >Login with Blockstack</Button>
                 </Form>
             </MasterContainer>
         )

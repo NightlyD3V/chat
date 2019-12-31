@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 //COMPONENTS
 import Time from './Time';
 import Chat from './Chat';
+//BLOCKSTACK
+import { Person } from 'blockstack';
 //IMAGES
 import logo from '../images/chat.png';
 //STYLES
@@ -57,12 +59,22 @@ const Connecting = styled.h3`
     color: yellow;
 `
 
+const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
+
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
             socketState: 1,
             clients: 0,
+            person: {
+                name() {
+                  return 'Anonymous';
+                },
+                avatarUrl() {
+                  return avatarFallbackImage;
+                },
+              },
             username: '',
             users: []
         }
@@ -79,10 +91,12 @@ class Home extends Component {
     // },[])
     
     componentWillMount() {
-        // const { userSession } = this.props
-        // this.setState({
-        //     username: userSession.loadUserData().username
-        // })
+        const { userSession } = this.props
+        this.setState({
+            person: new Person(userSession.loadUserData().profile),
+            username: userSession.loadUserData().username
+        })
+        console.log(this.state.person)
     }
 
     componentDidMount() {
@@ -107,6 +121,13 @@ class Home extends Component {
     //     })
     // }, [clients])
 
+    handleSignOut(e) {
+        e.preventDefault()
+        console.log(window.location)
+        this.props.userSession.signUserOut()
+        this.props.history.push('/login')
+    }
+
     render() {
         const { username } = this.state;
         return (
@@ -119,9 +140,17 @@ class Home extends Component {
                     <p style={{marginRight: '10px'}}>Online: {this.state.clients}</p>
                     <LinkContainer>
                     <Time connection={this.state.socketState}/>
+                    <h3 onClick={(e) => this.handleSignOut(e)}style={{marginRight: '20px'}}>Logout</h3>
                     </LinkContainer>
                 </NavContainer>
-                <Chat username={this.state.username} users={this.state.users} userSession={this.props.userSession} connection={this.state.SocketState} socketio={this.props.socketio}/>
+                <Chat 
+                    person={this.state.person}
+                    username={this.state.username} 
+                    users={this.state.users} 
+                    userSession={this.props.userSession} 
+                    connection={this.state.SocketState} 
+                    socketio={this.props.socketio}
+                />
                 {/* <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer> */}
             </div>
         )

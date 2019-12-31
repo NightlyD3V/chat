@@ -119,6 +119,8 @@ const DarkMode = styled.button`
     top: 700px;
     width: 90%;
 `
+const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
+
 class Chat extends Component {
 
     constructor(props) {
@@ -309,6 +311,11 @@ class Chat extends Component {
                 {backgroundColor: 'white', color: 'black'}
                 }>
                 <h3>Online Users</h3>
+                <img
+                 src={ this.props.person.avatarUrl() ? this.props.person.avatarUrl() : avatarFallbackImage }
+                 className="img-rounded avatar"
+                 id="avatar-image"
+                />
                 {this.props.users.map((user) => {
                     return <p>{user}</p>
                 })}
