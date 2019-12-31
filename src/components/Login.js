@@ -81,13 +81,13 @@ class Login extends Component {
         //     })
     }
 
-    handleChange = (e) => {
-        e.preventDefault();
-        this.setState({
-            userData: e.target.value
-        })
-        //setUserData({...userData, [e.target.name] : e.target.value});
-    }
+    // handleChange = (e) => {
+    //     e.preventDefault();
+    //     this.setState({
+    //         userData: e.target.value
+    //     })
+    //     //setUserData({...userData, [e.target.name] : e.target.value});
+    // }
 
     render() {
         return (
@@ -97,22 +97,8 @@ class Login extends Component {
                     <img src={logo} style={{ width: '50px', height: '50px' }}/>
                 </Header>
                 <Form>
-                    <Input
-                        placeholder='username'
-                        name='username'
-                        onChange={this.handleChange}
-                    >
-                    </Input>
-                    <Input
-                        placeholder='password'
-                        name='password'
-                        type='password'
-                        onChange={this.handleChange}
-                    >
-                    </Input>
-                    <button onClick={this.login}>Login</button>
+                    <button onClick={this.login}>Login with Blockstack</button>
                 </Form>
-                <Link to='/register'><h3>Don't have an account?</h3></Link>
             </MasterContainer>
         )
     }

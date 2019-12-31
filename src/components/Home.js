@@ -63,7 +63,8 @@ class Home extends Component {
         this.state = {
             socketState: 1,
             clients: 0,
-            username: ''
+            username: '',
+            users: []
         }
     }
     // const [socketState, setSocketState] = useState();
@@ -78,19 +79,25 @@ class Home extends Component {
     // },[])
     
     componentWillMount() {
-        const { userSession } = this.props
-        this.setState({
-            username: userSession.loadUserData().username
-        })
+        // const { userSession } = this.props
+        // this.setState({
+        //     username: userSession.loadUserData().username
+        // })
     }
 
     componentDidMount() {
-        console.log(this.state.username)
         console.log('home client connected')
         this.props.socketio.on('client connected', (clientCount) => {
             console.log(clientCount);
             this.setState({ clients: clientCount })
         })
+        this.props.socketio.emit('username', (this.state.username))
+        this.props.socketio.on('userlist', (list) => {
+            this.setState({
+                users: list
+            })
+        })
+        console.log(this.state.users)
     }
 
     // useEffect(() => {
@@ -114,7 +121,7 @@ class Home extends Component {
                     <Time connection={this.state.socketState}/>
                     </LinkContainer>
                 </NavContainer>
-                <Chat userSession={this.props.userSession} connection={this.state.SocketState} socketio={this.props.socketio}/>
+                <Chat username={this.state.username} users={this.state.users} userSession={this.props.userSession} connection={this.state.SocketState} socketio={this.props.socketio}/>
                 {/* <footer style={{ color: 'white', marginBottom: '20px'}}><p>&copy;2019 @LambdaStudent</p></footer> */}
             </div>
         )

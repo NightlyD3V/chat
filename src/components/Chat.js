@@ -6,20 +6,21 @@ import FileUpload from './FileUpload';
 import styled from 'styled-components';
 const MasterContainer = styled.div`
     display: flex;
-    height: 90vh;
-    width: 80%;
+    justify-content: space-between;
+    height: 500px;
+    margin: 0 auto;
+    width: 100%;
     /* Media Query */
     @media (max-width: 800px) {
-        height: 90vh
         width: 100%;
         margin: 0 auto;
         margin-bottom: 80px;
     }
 `
 const ChatContainer = styled.div`
-    width: 70%;
-    height: 90%;
-    margin-left: 500px;
+    width: 100%;
+    height: 100%;
+    margin-top: 60px;
     @media (max-width: 800px) {
         margin: 0 auto;
         width: 100%;
@@ -59,9 +60,8 @@ const Button = styled.button`
     }
 `
 const MessageContainer = styled.div`
-    height: 90%;
-    width: 100%;
-    margin-top: 100px;  
+    height: 100%;
+    width: 100%; 
     overflow-y: auto; 
     /* width */
     ::-webkit-scrollbar {
@@ -92,10 +92,8 @@ const Messages = styled.div`
     
 `
 const FriendContainer = styled.div`
-    height: 100vh;
-    width: 15%;
-    position: fixed;
-    right: 0px;
+    height: 580px;
+    width: 25%;
     margin-top: 60px;
     -webkit-box-shadow: -6px 0px 20px -5px rgba(0,0,0,1);
     -moz-box-shadow: -6px 0px 20px -5px rgba(0,0,0,1);
@@ -263,9 +261,10 @@ class Chat extends Component {
                     }>
                     <Messages>
                         {this.state.messages.map((message, index) => {
+                            console.log(this.props.username)
                             return (
                             <h4 style= {
-                                {padding: '10px', margin: '0 auto'}} key={index}>{message}
+                                {padding: '10px', margin: '0 auto'}} key={index}>{this.props.username, message}
                             </h4>
                         )})}
                     </Messages>
@@ -298,19 +297,21 @@ class Chat extends Component {
                     <Button type="button" onClick={(e) => 
                         this.state.gifs ? this.setState({gifs : false}) : this.handleGifs(e)}>Gif
                     </Button>
-                    <Button type="button" id="uploadButton" onClick={(e) => 
+                    {/* <Button type="button" id="uploadButton" onClick={(e) => 
                         this.state.file ? this.setState({file: false}) : this.handleFile(e)}>{'📎'}
                     </Button>
-                    <Button type="button">{'😁'}</Button>
+                    <Button type="button">{'😁'}</Button> */}
                 </Form>
             </ChatContainer>
             <FriendContainer style= { 
                 this.state.darkMode ? 
                 {backgroundColor: '#0B0C10', color: 'white'} : 
-                {backgroundColor: '#736f96', color: 'black'}
+                {backgroundColor: 'white', color: 'black'}
                 }>
-                <h3>Friends</h3>
-                <DarkMode onClick={(e) => this.state.darkMode ? this.setState({darkMode : false}) : this.darkMode(e)}>Dark Mode</DarkMode>
+                <h3>Online Users</h3>
+                {this.props.users.map((user) => {
+                    return <p>{user}</p>
+                })}
             </FriendContainer>
         </MasterContainer>
         )
