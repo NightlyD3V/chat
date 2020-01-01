@@ -103,6 +103,12 @@ const FriendContainer = styled.div`
         display: none;
     }
 `
+
+const ProfilePicture = styled.img`
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 100px;
+`
 const Typing = styled.p`
     width: 100%;
     background-color: #736f96;
@@ -145,12 +151,12 @@ class Chat extends Component {
     componentDidMount() {
         //LISTEN FOR USER TYPING
         this.props.socketio.on('typing', async () => {
-            this.setState({typing: true});
+            this.setState({typing: true})
         });
         //LISTEN FOR MESSAGES
-        this.props.socketio.on('chat message', async (msg, date) => {
-            let newMessage = await msg;
-            this.setState({messages: [...this.state.messages, newMessage]})
+        this.props.socketio.on('chat message', async (msg) => {
+            let newMessage = await msg
+            this.setState({messages: [...this.state.messages, newMessage ]})
             console.log(this.state.messages)
         });
         //LISTEN FOR GIFS
@@ -242,14 +248,18 @@ class Chat extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        let input = this.state.input
         this.setState({typing: false})
         document.getElementById('form').reset();
+        //console.log(this.state.input)
         //console.log('message sent: ', this.state.input);
         if(this.state.input.length === 0) {
             alert('Please enter a message!'); 
             return null;
         }
-        this.props.socketio.emit('chat message', this.state.input);
+        this.props.socketio.emit('chat message', this.props.userSession.loadUserData().username, this.state.input, function(data) {
+            console.log(data)
+        });
     }
 
     render() {
@@ -266,7 +276,7 @@ class Chat extends Component {
                             console.log(this.props.username)
                             return (
                             <h4 style= {
-                                {padding: '10px', margin: '0 auto'}} key={index}>{this.props.username, message}
+                                {padding: '10px', margin: '0 auto'}} key={index}>{message}
                             </h4>
                         )})}
                     </Messages>
@@ -311,10 +321,8 @@ class Chat extends Component {
                 {backgroundColor: 'white', color: 'black'}
                 }>
                 <h3>Online Users</h3>
-                <img
+                <ProfilePicture
                  src={ this.props.person.avatarUrl() ? this.props.person.avatarUrl() : avatarFallbackImage }
-                 className="img-rounded avatar"
-                 id="avatar-image"
                 />
                 {this.props.users.map((user) => {
                     return <p>{user}</p>

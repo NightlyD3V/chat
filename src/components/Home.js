@@ -96,6 +96,7 @@ class Home extends Component {
             person: new Person(userSession.loadUserData().profile),
             username: userSession.loadUserData().username
         })
+        this.props.socketio.emit('username', (this.state.username))
         console.log(this.state.person)
     }
 
@@ -105,7 +106,6 @@ class Home extends Component {
             console.log(clientCount);
             this.setState({ clients: clientCount })
         })
-        this.props.socketio.emit('username', (this.state.username))
         this.props.socketio.on('userlist', (list) => {
             this.setState({
                 users: list
