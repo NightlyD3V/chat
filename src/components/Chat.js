@@ -321,12 +321,14 @@ class Chat extends Component {
                 {backgroundColor: 'white', color: 'black'}
                 }>
                 <h3>Online Users</h3>
-                <ProfilePicture
-                 src={ this.props.person.avatarUrl() ? this.props.person.avatarUrl() : avatarFallbackImage }
-                />
-                {this.props.users.map((user) => {
-                    return <p>{user}</p>
-                })}
+                <div style={{display: 'flex'}}>
+                    <ProfilePicture
+                    src={ this.props.person.avatarUrl() ? this.props.person.avatarUrl() : avatarFallbackImage }
+                    />
+                    {this.props.users.map((user) => {
+                        return <p>{user}</p>
+                    })}
+                </div>
             </FriendContainer>
         </MasterContainer>
         )
