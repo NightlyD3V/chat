@@ -107,7 +107,7 @@ const FriendContainer = styled.div`
 const ProfilePicture = styled.img`
     max-width: 50px;
     max-height: 50px;
-    border-radius: 100px;
+    border-radius: 50%;
 `
 const Typing = styled.p`
     width: 100%;
@@ -321,13 +321,16 @@ class Chat extends Component {
                 {backgroundColor: 'white', color: 'black'}
                 }>
                 <h3>Online Users</h3>
-                <div style={{display: 'flex'}}>
+                <div style={{display: 'flex', padding: '10px'}}>
                     <ProfilePicture
                     src={ this.props.person.avatarUrl() ? this.props.person.avatarUrl() : avatarFallbackImage }
                     />
-                    {this.props.users.map((user) => {
+                    <div>
+                    {this.props.userlog.map((user) => {
+                        console.log(user)
                         return <p>{user}</p>
                     })}
+                    </div>
                 </div>
             </FriendContainer>
         </MasterContainer>

@@ -76,7 +76,8 @@ class Home extends Component {
                 },
               },
             username: '',
-            users: []
+            users: [],
+            userlog: []
         }
     }
     // const [socketState, setSocketState] = useState();
@@ -96,8 +97,10 @@ class Home extends Component {
             person: new Person(userSession.loadUserData().profile),
             username: userSession.loadUserData().username
         })
-        this.props.socketio.emit('username', (this.state.username))
+        this.props.socketio.emit('username', userSession.loadUserData().username)
         console.log(this.state.person)
+        //SEND USER INFO TO SERVER 
+        this.props.socektio.emit('newUser', this.state.person)
     }
 
     componentDidMount() {
@@ -107,9 +110,10 @@ class Home extends Component {
             this.setState({ clients: clientCount })
         })
         this.props.socketio.on('userlist', (list) => {
-            this.setState({
-                users: list
-            })
+            this.setState({ users: list })
+        })
+        this.props.socketio.on('userInfo', (user) => {
+            this.setState({ userlog: user })
         })
         console.log(this.state.users)
     }
@@ -146,7 +150,8 @@ class Home extends Component {
                 <Chat 
                     person={this.state.person}
                     username={this.state.username} 
-                    users={this.state.users} 
+                    users={this.state.users}
+                    userlog={this.state.userlog} 
                     userSession={this.props.userSession} 
                     connection={this.state.SocketState} 
                     socketio={this.props.socketio}
